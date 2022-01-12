@@ -1,3 +1,5 @@
+#ifdef ESP32
+  #include <WiFi.h>
 #else
   #include <ESP8266WiFi.h>
 #endif
@@ -52,12 +54,12 @@ int ldr(){
   if(val < 3500){
     digitalWrite(fan, LOW);
     delay(500);
-     bot.sendMessage(chat_id, "THE LIGHT IS NOW ON", "");
+  //   bot.sendMessage(chat_id, "THE LIGHT IS NOW ON", "");
     } 
     else{
-      digitalWrite(Fan, HIGH);
+      digitalWrite(fan, HIGH);
       delay(500);
-       bot.sendMessage(chat_id, "THE LIGHT IS OFF", "");
+   //    bot.sendMessage(chat_id, "THE LIGHT IS OFF", "");
       }
   
   }
@@ -105,16 +107,16 @@ void handleNewMessages(int numNewMessages) {
     }
 
     
-    if (text == "/state") {
-      if (digitalRead(fan)){
-        bot.sendMessage(chat_id, "FAN is ON", "");
+    if (fan == LOW) {
+      
+        bot.sendMessage(chat_id, "THE LIGHT IS TURNED ON", "");
       }
       else{
-        bot.sendMessage(chat_id, "FAN is OFF", "");
+        bot.sendMessage(chat_id, "THE LIGHT IS TURNED OFF", "");
       }
     }
   }
-}
+
 
 void setup() {
   pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
@@ -170,20 +172,20 @@ void Ultra() {
  if(distanceCm < 30){
     digitalWrite(fan, LOW);
     delay(500);
-     bot.sendMessage(chat_id, "YOU ARE TOO CLOSE TO THE DEVICE", "");
+   //  bot.sendMessage(chat_id, "YOU ARE TOO CLOSE TO THE DEVICE", "");
   }
   else{
      digitalWrite(fan, HIGH);
      delay(500);
-     bot.sendMessage(chat_id, "KEEP DISTANCE", "");
+   //  bot.sendMessage(chat_id, "KEEP DISTANCE", "");
     }
   
  
 }
 
 void loop() {
-  ldr()
-   Ultra()
+  ldr();
+   Ultra();
   if (millis() > lastTimeBotRan + botRequestDelay)  {
     int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
 
@@ -195,3 +197,4 @@ void loop() {
     lastTimeBotRan = millis();
   }
 }
+
